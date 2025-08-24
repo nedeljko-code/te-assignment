@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import PostCard from "@/app/components/PostCasrd";
+import PostCard from "@/app/components/PostCard";
 
 export default function Posts() {
   type Post = {
