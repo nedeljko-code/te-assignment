@@ -1,20 +1,18 @@
-import { NextRequest, NextResponse } from "next/server";
-import { API_BASE } from "@/lib/api";  // ⬅️ use API_BASE
+import { NextRequest } from "next/server";
+const API_BASE = (process.env.API_BASE || process.env.NEXT_PUBLIC_API_BASE || "").replace(/\/$/,"");
+const PATH = "/auth/signup";
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-  const url = `${API_BASE.replace(/\/$/, "")}/auth/signup`; // ⬅️ build URL
-
-  const r = await fetch(url, {
+  const body = await req.json().catch(() => null);
+  const res = await fetch(`${API_BASE}${PATH}`, {
     method: "POST",
-    headers: { "content-type": "application/json", accept: "application/json" },
-    body: JSON.stringify(body),
+    headers: { "Content-Type": "application/json" },
+    body: body ? JSON.stringify(body) : undefined,
     cache: "no-store",
   });
-
-  const text = await r.text();
-  return new NextResponse(text, {
-    status: r.status,
-    headers: { "content-type": r.headers.get("content-type") ?? "application/json" },
+  const text = await res.text();
+  return new Response(text, {
+    status: res.status,
+    headers: { "Content-Type": res.headers.get("content-type") ?? "application/json" },
   });
 }
