@@ -13,11 +13,12 @@ export default function SignupPage() {
     const res = await fetch("/api/te/auth/signup", {
       method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload)
     });
+    
     const data = await res.json().catch(() => ({}));
-    if (!res.ok) return alert(`Greška ${res.status}`);
+    if (!res.ok) return alert(`Error ${res.status}`);
     const token = (data as any).token || (data as any).accessToken || (data as any).jwt;
     if (token) localStorage.setItem("te_token", token);
-    r.replace("/posts"); // ili /auth/login?registered=1
+    r.replace("/posts"); 
   }
 
   return (
@@ -27,7 +28,7 @@ export default function SignupPage() {
       <input className="w-full border rounded px-3 py-2" type="email" placeholder="Email" value={f.email} onChange={ch("email")} required />
       <input className="w-full border rounded px-3 py-2" type="password" placeholder="Lozinka" value={f.password} onChange={ch("password")} required />
       <input className="w-full border rounded px-3 py-2" type="password" placeholder="Potvrda lozinke" value={f.confirm} onChange={ch("confirm")} required />
-      <button className="w-full rounded bg-black text-white py-2">Kreiraj nalog</button>
+      <button className="w-full rounded bg-black text-white py-2">Create </button>
     </form>
   );
 }

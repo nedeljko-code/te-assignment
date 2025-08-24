@@ -4,7 +4,7 @@ export const runtime = "nodejs";
 export async function GET() {
   try {
     const base = process.env.NEXT_PUBLIC_API_BASE || "";
-    // skini eventualni trailing /api da bi pogodili /api-json
+    
     const root = base.replace(/\/api\/?$/, "");
 
     if (!root) {
