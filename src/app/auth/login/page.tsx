@@ -33,7 +33,7 @@ r.replace("/posts");
     return(
         
     <form onSubmit={onSubmit} className="max-w-sm mx-auto p-6 space-y-3">
-      <h1 className="text-2xl font-semibold">Sign up</h1>
+      <h1 className="text-2xl font-semibold">Login</h1>
       
       <input className="w-full border rounded px-3 py-2" type="email" placeholder="Email" value={p.email} onChange={ch("email")} required />
       <input className="w-full border rounded px-3 py-2" type="password" placeholder="Lozinka" value={p.password} onChange={ch("password")} required />
