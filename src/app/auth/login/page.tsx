@@ -17,10 +17,18 @@ export default function LoginPage(){
       method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload)
     });
     const data = await res.json().catch(() => ({}));
-    if (!res.ok) return alert(`Error ${res.status}`);
-    const token = (data as any).token || (data as any).accessToken || (data as any).jwt;
-    if (token) localStorage.setItem("te_token", token);
-    r.replace("/posts"); 
+    if (!res.ok) return alert(data?.message || `Error ${res.status}`);
+
+const accessToken = data?.accessToken || data?.token || data?.jwt;
+const refreshToken = data?.refreshToken || "";
+const userId = data?.user?.id || data?.userId || "";
+
+if (accessToken) localStorage.setItem("accessToken", accessToken);
+if (refreshToken) localStorage.setItem("refreshToken", refreshToken);
+if (userId) localStorage.setItem("userId", userId);
+localStorage.removeItem("te_token");
+
+r.replace("/posts"); 
     }
     return(
         
