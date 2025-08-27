@@ -1,35 +1,50 @@
 "use client";
+
 import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import PostCard from "@/app/components/PostCard";
 
-export default function UserPostsPage({ params }: { params: { userId: string } }) {
-  const [items, setItems] = useState<any[]>([]);
+export default function UserPostsPage() {
+  type Post = {
+    id: string;
+    createdAt?: string;
+    title: string;
+    content: string;
+    published?: boolean;
+    authorId: string;
+  };
+
+  const { userId } = useParams<{ userId: string }>();
+  const r = useRouter();
+
+  const [items, setItems] = useState<Post[]>([]);
 
   useEffect(() => {
-  const token = localStorage.getItem("accessToken") || "";
+    if (!userId) return;
+    const token = localStorage.getItem("accessToken") || "";
 
-  fetch(`/api/te/posts/user/${params.userId}`, {
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
-    cache: "no-store",
-  })
-    .then(async (r) => {
-      if (r.status === 401) {
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        localStorage.removeItem("userId");
-        location.href = "/auth/login";
-        return [];
-      }
-      const data = await r.json();
-      return Array.isArray(data) ? data : data?.data ?? [];
+    fetch(`/api/te/posts/user/${userId}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      cache: "no-store",
     })
-    .then(setItems)
-    .catch(console.error);
-}, [params.userId]);
+      .then(async (res) => {
+        if (res.status === 401) {
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
+          localStorage.removeItem("userId");
+          r.replace("/auth/login");
+          return [];
+        }
+        const data = await res.json();
+        return Array.isArray(data) ? data : data?.data ?? [];
+      })
+      .then(setItems)
+      .catch(console.error);
+  }, [userId, r]);
 
   return (
     <div className="columns-1 sm:columns-2 lg:columns-3 gap-5">
-      {items.map(p => (
+      {items.map((p) => (
         <PostCard
           key={p.id}
           id={p.id}
