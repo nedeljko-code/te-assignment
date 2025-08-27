@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import PostCard from "@/app/components/PostCard";
 
 export default function Posts() {
-  // Tipovi iz tvog BE odgovora
+  
   type Post = {
     id: string;
     createdAt: string;
@@ -19,12 +19,12 @@ export default function Posts() {
 
   const r = useRouter();
 
-  // Forma za kreiranje
+  
   const [post, setPost] = useState({ title: "", content: "" });
   const ch = (k: keyof typeof post) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setPost({ ...post, [k]: e.target.value });
 
-  // Lista + search
+  
   const [posts, setPosts] = useState<Post[]>([]);
   const [q, setQ] = useState("");
 
@@ -39,7 +39,7 @@ export default function Posts() {
     }
   };
 
-  // Učitavanje liste
+  
   async function loadPosts() {
     const token = typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
 
@@ -65,12 +65,12 @@ export default function Posts() {
         })()
       : null;
 
-    // Backend može vratiti niz ili { data: [...] }
+    
     const list = Array.isArray(json) ? json : json?.data ?? [];
     setPosts(list as Post[]);
   }
 
-  // Mount: ako nema tokena – login; inače učitaj
+ 
   useEffect(() => {
     const token = typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
     if (!token) {
@@ -81,7 +81,7 @@ export default function Posts() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Kreiranje posta
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const token = typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
@@ -120,12 +120,12 @@ export default function Posts() {
       return;
     }
 
-    // Uspeh: osveži listu i resetuj formu
+    
     await loadPosts();
     setPost({ title: "", content: "" });
   };
 
-  // Filtriranje (client-side)
+  
   const query = q.trim().toLowerCase();
   const list = query
     ? posts.filter(
@@ -137,7 +137,7 @@ export default function Posts() {
 
   return (
     <>
-      {/* Forma za kreiranje */}
+      
       <form onSubmit={handleSubmit} className="max-w-sm mx-auto p-6 space-y-3">
         <input
           type="text"
@@ -170,7 +170,7 @@ export default function Posts() {
         />
       </div>
 
-      {/* Lista postova */}
+      
       {list.map((p) => (
         <PostCard
           key={p.id}
