@@ -14,7 +14,7 @@ export default function Posts() {
     content: string;
     published: boolean;
     authorId: string;
-    authorName?: string;
+    
   };
 
   const r = useRouter();
@@ -180,7 +180,7 @@ export default function Posts() {
           createdAt={p.createdAt}
           published={p.published}
           authorId={p.authorId}
-          authorName={p.authorName}
+          
         />
       ))}
     </>
